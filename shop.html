@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Kondaji Chivda - Shop Now</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Kondaji Chivda, Nashik Chivda, Jain Chivda, Makhnal Chivda, Maka Chivda, Dal Math, Vishal Bhel, Indian Snacks" name="keywords">
+    <meta content="Shop authentic Nashik chivda, Jain-friendly snacks, and premium Indian namkeen at Kondaji Chivda." name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- Inline CSS for Shop Cards, Cart, Payment, and Order Summary -->
+    <style>
+        .shop-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 450px; /* Increased to accommodate full image */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .shop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .shop-card .card-body {
+            text-align: center;
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .shop-card .card-img-top {
+            max-height: 200px; /* Flexible height */
+            width: 100%;
+            object-fit: contain; /* Show full image without cropping */
+            background-color: #f8f9fa; /* Light background for visibility */
+        }
+        .shop-card .card-text {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            height: 60px;
+        }
+        .shop-card .input-group {
+            margin-top: auto;
+        }
+        .cart-table th, .cart-table td {
+            vertical-align: middle;
+        }
+        .cart-table .btn-sm {
+            padding: 5px 10px;
+        }
+        .payment-section {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f9f9f9, #e0e7ff);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .payment-option {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .payment-option:hover {
+            transform: scale(1.02);
+            border-color: #3b82f6;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .payment-option input:checked + label {
+            color: #3b82f6;
+            font-weight: bold;
+        }
+        .payment-option label {
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #333;
+        }
+        .payment-option input {
+            margin-right: 10px;
+        }
+        .payment-details {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .payment-details input {
+            border-radius: 5px;
+            border: 1px solid #d1d5db;
+            padding: 8px;
+        }
+        .confirm-payment-btn {
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        .confirm-payment-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
+        }
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+        .is-invalid {
+            border-color: #dc3545 !important;
+        }
+        .invalid-feedback {
+            color: #dc3545;
+            font-size: 0.875rem;
+        }
+        .order-summary {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .navbar-brand h1 {
+            font-size: 2.5rem; /* Increased font size for Kondaji Chivda */
+            font-weight: bold; /* Make Kondaji Chivda text bold */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-xxl bg-white p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+        <!-- Navbar & Hero Start -->
+        <div class="container-xxl position-relative p-0">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 px-lg-5 py-3 py-lg-0">
+                <a href="index.html" class="navbar-brand p-0 d-flex align-items-center">
+                    <img src="img/logo.png" alt="Kondaji Chivda Logo" style="width: 70px; height: 100px; margin-right: 10px;">
+                    <h1 class="text-primary m-0"><i class="fa fa-bowl-food me-3"></i>Kondaji Chivda</h1>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="fa fa-bars"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto py-0 pe-4">
+                        <a href="index.html" class="nav-item nav-link">Home</a>
+                        <a href="about.html" class="nav-item nav-link">About</a>
+                        <a href="products.html" class="nav-item nav-link">Products</a>
+                        <a href="testimonials.html" class="nav-item nav-link">Testimonials</a>
+                        <a href="why-choose-us.html" class="nav-item nav-link">Why Choose Us</a>
+                        <a href="contact.html" class="nav-item nav-link">Contact Us</a>
+                    </div>
+                    <a href="shop.html" class="btn btn-primary py-2 px-4"><i class="fa fa-shopping-cart me-2"></i>Shop Now</a>
+                </div>
+            </nav>
+
+            <div class="container-xxl py-5 bg-dark hero-header mb-5">
+                <div class="container text-center my-5 pt-5 pb-4">
+                    <h1 class="display-3 text-white mb-3 animated slideInDown">Shop Kondaji Chivda</h1>
+                    <p class="text-white animated slideInLeft mb-4 pb-2">Discover Our Authentic Indian Snacks</p>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center text-uppercase">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Shop Now</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- Navbar & Hero End -->
+
+        <!-- Shop Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                    <h5 class="section-title ff-secondary text-center text-primary fw-normal">Our Shop</h5>
+                    <h1 class="mb-5">Explore Our Chivda & Namkeen</h1>
+                </div>
+                <div class="row g-4">
+                    <!-- Products -->
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="card shop-card text-center rounded overflow-hidden">
+                            <img src="img/Product-1.jpeg" class="card-img-top" alt="Nashik Chivda">
+                            <div class="card-body">
+                                <h5 class="mb-2">Nashik Chivda</h5>
+                                <p class="card-text">Crispy and spicy mix of flattened rice, nuts, and spices.</p>
+                                <p class="fw-bold text-primary" id="price-nashik-chivda">₹150</p>
+                                <div class="input-group">
+                                    <select class="form-select weight-select" data-name="Nashik Chivda">
+                                        <option value="250" data-price="90">250g - ₹90</option>
+                                        <option value="500" data-price="150" selected>500g - ₹150</option>
+                                        <option value="1000" data-price="270">1kg - ₹270</option>
+                                    </select>
+                                    <button class="btn btn-primary add-to-cart" data-name="Nashik Chivda" data-price="150">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
+                        <div class="card shop-card text-center rounded overflow-hidden">
+                            <img src="img/Product-2.jpeg" class="card-img-top" alt="Jain Chivda">
+                            <div class="card-body">
+                                <h5 class="mb-2">Jain Chivda</h5>
+                                <p class="card-text">Jain-friendly snack with no onion or garlic, full of flavor.</p>
+                                <p class="fw-bold text-primary" id="price-jain-chivda">₹180</p>
+                                <div class="input-group">
+                                    <select class="form-select weight-select" data-name="Jain Chivda">
+                                        <option value="250" data-price="108">250g - ₹108</option>
+                                        <option value="500" data-price="180" selected>500g - ₹180</option>
+                                        <option value="1000" data-price="324">1kg - ₹324</option>
+                                    </select>
+                                    <button class="btn btn-primary add-to-cart" data-name="Jain Chivda" data-price="180">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="card shop-card text-center rounded overflow-hidden">
+                            <img src="img/Product-3.jpeg" class="card-img-top" alt="Makhnal Chivda">
+                            <div class="card-body">
+                                <h5 class="mb-2">Makhnal Chivda</h5>
+                                <p class="card-text">Rich and buttery chivda with a unique taste.</p>
+                                <p class="fw-bold text-primary" id="price-makhnal-chivda">₹160</p>
+                                <div class="input-group">
+                                    <select class="form-select weight-select" data-name="Makhnal Chivda">
+                                        <option value="250" data-price="96">250g - ₹96</option>
+                                        <option value="500" data-price="160" selected>500g - ₹160</option>
+                                        <option value="1000" data-price="288">1kg - ₹288</option>
+                                    </select>
+                                    <button class="btn btn-primary add-to-cart" data-name="Makhnal Chivda" data-price="160">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
+                        <div class="card shop-card text-center rounded overflow-hidden">
+                            <img src="img/Product-4.jpeg" class="card-img-top" alt="Maka Chivda">
+                            <div class="card-body">
+                                <h5 class="mb-2">Maka Chivda</h5>
+                                <p class="card-text">Corn-based chivda with a crunchy texture.</p>
+                                <p class="fw-bold text-primary" id="price-maka-chivda">₹140</p>
+                                <div class="input-group">
+                                    <select class="form-select weight-select" data-name="Maka Chivda">
+                                        <option value="250" data-price="84">250g - ₹84</option>
+                                        <option value="500" data-price="140" selected>500g - ₹140</option>
+                                        <option value="1000" data-price="252">1kg - ₹252</option>
+                                    </select>
+                                    <button class="btn btn-primary add-to-cart" data-name="Maka Chivda" data-price="140">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                        <div class="card shop-card text-center rounded overflow-hidden">
+                            <img src="img/Product-5.jpeg" class="card-img-top" alt="Dal Math">
+                            <div class="card-body">
+                                <h5 class="mb-2">Dal Math</h5>
+                                <p class="card-text">Savory lentil-based snack with a spicy kick.</p>
+                                <p class="fw-bold text-primary" id="price-dal-math">₹120</p>
+                                <div class="input-group">
+                                    <select class="form-select weight-select" data-name="Dal Math">
+                                        <option value="250" data-price="72">250g - ₹72</option>
+                                        <option value="500" data-price="120" selected>500g - ₹120</option>
+                                        <option value="1000" data-price="216">1kg - ₹216</option>
+                                    </select>
+                                    <button class="btn btn-primary add-to-cart" data-name="Dal Math" data-price="120">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+                        <div class="card shop-card text-center rounded overflow-hidden">
+                            <img src="img/Product-6.jpeg" class="card-img-top" alt="Vishal Bhel">
+                            <div class="card-body">
+                                <h5 class="mb-2">Vishal Bhel</h5>
+                                <p class="card-text">Tangy and spicy puffed rice mix, perfect for any time.</p>
+                                <p class="fw-bold text-primary" id="price-vishal-bhel">₹100</p>
+                                <div class="input-group">
+                                    <select class="form-select weight-select" data-name="Vishal Bhel">
+                                        <option value="250" data-price="60">250g - ₹60</option>
+                                        <option value="500" data-price="100" selected>500g - ₹100</option>
+                                        <option value="1000" data-price="180">1kg - ₹180</option>
+                                    </select>
+                                    <button class="btn btn-primary add-to-cart" data-name="Vishal Bhel" data-price="100">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Cart Summary -->
+                <div class="mt-5" id="cart-section">
+                    <h2 class="text-center mb-4">Your Cart</h2>
+                    <table class="table table-bordered cart-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Weight</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart-items"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" class="text-end fw-bold">Total:</td>
+                                <td id="cart-total" class="fw-bold">₹0</td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm" id="clear-cart">Clear Cart</button>
+                                    <button class="btn btn-success btn-sm" id="proceed-to-payment">Proceed to Payment</button>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- Payment Section -->
+                <div class="mt-5 payment-section" id="payment-section" style="display: none;">
+                    <h2 class="text-center mb-4 text-2xl font-bold text-gray-800">Choose Your Payment Method</h2>
+                    <div class="payment-option flex items-center">
+                        <input type="radio" name="payment-method" id="credit-debit" value="credit-debit" class="form-radio h-5 w-5 text-blue-600">
+                        <label for="credit-debit" class="flex items-center space-x-2">
+                            <i class="fas fa-credit-card text-blue-500"></i>
+                            <span>Credit/Debit Card</span>
+                        </label>
+                        <div class="payment-details w-full" id="credit-debit-details">
+                            <div class="mb-3">
+                                <label for="card-number" class="form-label text-sm font-medium text-gray-700">Card Number</label>
+                                <input type="text" class="form-control w-full" id="card-number" placeholder="1234 5678 9012 3456" pattern="[0-9]{16}" maxlength="16">
+                                <div class="invalid-feedback">Please enter a valid 16-digit card number.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="card-expiry" class="form-label text-sm font-medium text-gray-700">Expiry Date</label>
+                                <input type="text" class="form-control w-full" id="card-expiry" placeholder="MM/YY" pattern="(0[1-9]|1[0-2])/[0-9]{2}">
+                                <div class="invalid-feedback">Please enter a valid expiry date (MM/YY).</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="card-cvv" class="form-label text-sm font-medium text-gray-700">CVV</label>
+                                <input type="text" class="form-control w-full" id="card-cvv" placeholder="123" pattern="[0-9]{3}" maxlength="3">
+                                <div class="invalid-feedback">Please enter a valid 3-digit CVV.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="payment-option flex items-center">
+                        <input type="radio" name="payment-method" id="upi" value="upi" class="form-radio h-5 w-5 text-blue-600">
+                        <label for="upi" class="flex items-center space-x-2">
+                            <i class="fas fa-mobile-alt text-blue-500"></i>
+                            <span>UPI</span>
+                        </label>
+                        <div class="payment-details w-full" id="upi-details">
+                            <div class="mb-3">
+                                <label for="upi-id" class="form-label text-sm font-medium text-gray-700">UPI ID</label>
+                                <input type="text" class="form-control w-full" id="upi-id" placeholder="yourname@upi">
+                                <div class="invalid-feedback">Please enter a valid UPI ID.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="payment-option flex items-center">
+                        <input type="radio" name="payment-method" id="cod" value="cod" class="form-radio h-5 w-5 text-blue-600">
+                        <label for="cod" class="flex items-center space-x-2">
+                            <i class="fas fa-money-bill-wave text-blue-500"></i>
+                            <span>Cash on Delivery</span>
+                        </label>
+                    </div>
+                    <div class="text-end mt-4">
+                        <button class="confirm-payment-btn" id="confirm-payment">Confirm Payment</button>
+                    </div>
+                </div>
+                <!-- Order Summary -->
+                <div id="order-summary" class="order-summary" style="display: none;">
+                    <h3 class="mb-3">Order Summary</h3>
+                    <div id="order-details"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Shop End -->
+
+        <!-- Checkout Modal -->
+        <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="checkoutModalLabel">Enter Your Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="checkout-form">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" required>
+                                <div class="invalid-feedback">Please enter your name.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" required>
+                                <div class="invalid-feedback">Please enter a valid email.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="phone" pattern="[0-9]{10}" placeholder="9876543210" required>
+                                <div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <textarea class="form-control" id="address" rows="4" required></textarea>
+                                <div class="invalid-feedback">Please enter your address.</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Proceed to Payment</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div class="toast-container">
+            <div class="toast" id="cartToast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Cart</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body" id="toast-message"></div>
+            </div>
+        </div>
+
+        <!-- Footer Start -->
+        <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+            <div class="container py-5">
+                <div class="row g-5">
+                    <div class="col-lg-3 col-md-6">
+                        <h4 class="section-title ff-secondary text-start text-primary fw-normal mb-4">Company</h4>
+                        <a class="btn btn-link" href="about.html">About Us</a>
+                        <a class="btn btn-link" href="contact.html">Contact Us</a>
+                        <a class="btn btn-link" href="shop.html">Shop Now</a>
+                        <a class="btn btn-link" href="">Privacy Policy</a>
+                        <a class="btn btn-link" href="">Terms & Condition</a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h4 class="section-title ff-secondary text-start text-primary fw-normal mb-4">Contact</h4>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Snack Street, Nashik, Maharashtra, India</p>
+                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+91 98765 43210</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@kondajichivda.com</p>
+                        <div class="d-flex pt-2">
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h4 class="section-title ff-secondary text-start text-primary fw-normal mb-4">Opening</h4>
+                        <h5 class="text-light fw-normal">Monday - Saturday</h5>
+                        <p>09AM - 06PM</p>
+                        <h5 class="text-light fw-normal">Sunday</h5>
+                        <p>10AM - 04PM</p>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h4 class="section-title ff-secondary text-start text-primary fw-normal mb-4">Newsletter</h4>
+                        <p>Stay updated with our latest products and offers.</p>
+                        <div class="position-relative mx-auto" style="max-width: 400px;">
+                            <input class="form-control border-primary w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
+                            <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="copyright">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            © <a class="border-bottom" href="#">Kondaji Chivda</a>
+                            Designed By <a class="border-bottom" href="https://htmlcodex.com">INSHA KAZI</a><br><br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End -->
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/counterup/counterup.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+
+    <!-- Cart and Payment JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize cart from localStorage or empty array
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let lastOrder = null;
+            let selectedPaymentMethod = null;
+
+            // Function to save cart to localStorage
+            function saveCart() {
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+
+            // Function to update cart display
+            function updateCart() {
+                const cartItems = document.getElementById('cart-items');
+                const cartTotal = document.getElementById('cart-total');
+                cartItems.innerHTML = '';
+
+                let total = 0;
+                cart.forEach((item, index) => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.name}</td>
+                        <td>${item.weight}g</td>
+                        <td>₹${item.price}</td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm decrease-quantity" data-index="${index}">-</button>
+                            ${item.quantity}
+                            <button class="btn btn-secondary btn-sm increase-quantity" data-index="${index}">+</button>
+                        </td>
+                        <td>₹${itemTotal}</td>
+                        <td><button class="btn btn-danger btn-sm remove-item" data-index="${index}">Remove</button></td>
+                    `;
+                    cartItems.appendChild(row);
+                });
+
+                cartTotal.textContent = `₹${total}`;
+                document.getElementById('payment-section').style.display = cart.length > 0 ? 'block' : 'none';
+
+                // Update order summary if exists
+                updateOrderSummary();
+            }
+
+            // Function to update order summary
+            function updateOrderSummary() {
+                const orderSummary = document.getElementById('order-summary');
+                const orderDetails = document.getElementById('order-details');
+                if (lastOrder && cart.length === 0) {
+                    orderSummary.style.display = 'block';
+                    let html = '<h4>Order Details:</h4><ul>';
+                    lastOrder.items.forEach(item => {
+                        html += `<li>${item.name} (${item.weight}g) - ₹${item.price} x ${item.quantity} = ₹${item.price * item.quantity}</li>`;
+                    });
+                    html += `</ul><p><strong>Total:</strong> ₹${lastOrder.total}</p>`;
+                    html += `<p><strong>Customer Details:</strong><br>Name: ${lastOrder.name}<br>Email: ${lastOrder.email}<br>Phone: ${lastOrder.phone}<br>Address: ${lastOrder.address}</p>`;
+                    html += `<p><strong>Payment Method:</strong> ${lastOrder.paymentMethod}</p>`;
+                    orderDetails.innerHTML = html;
+                } else {
+                    orderSummary.style.display = 'none';
+                }
+            }
+
+            // Function to show toast notification
+            function showToast(message) {
+                const toastEl = document.getElementById('cartToast');
+                toastEl.querySelector('#toast-message').textContent = message;
+                const toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            }
+
+            // Update price display on weight change
+            document.querySelectorAll('.weight-select').forEach(select => {
+                select.addEventListener('change', function () {
+                    const price = this.options[this.selectedIndex].getAttribute('data-price');
+                    const name = this.getAttribute('data-name');
+                    const priceElement = document.getElementById(`price-${name.toLowerCase().replace(' ', '-')}`);
+                    priceElement.textContent = `₹${price}`;
+                    const addButton = this.parentElement.querySelector('.add-to-cart');
+                    addButton.setAttribute('data-price', price);
+                    addButton.setAttribute('data-weight', this.value);
+                });
+            });
+
+            // Add to cart event listener
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function () {
+                    const name = this.getAttribute('data-name');
+                    const price = parseFloat(this.getAttribute('data-price'));
+                    const weight = this.getAttribute('data-weight') || '500';
+                    const existingItem = cart.find(item => item.name === name && item.weight === weight);
+
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cart.push({ name, price, weight, quantity: 1 });
+                    }
+
+                    saveCart();
+                    updateCart();
+                    showToast(`${name} (${weight}g) added to cart!`);
+                });
+            });
+
+            // Increase quantity event listener
+            document.getElementById('cart-items').addEventListener('click', function (e) {
+                if (e.target.classList.contains('increase-quantity')) {
+                    const index = e.target.getAttribute('data-index');
+                    cart[index].quantity += 1;
+                    saveCart();
+                    updateCart();
+                }
+            });
+
+            // Decrease quantity event listener
+            document.getElementById('cart-items').addEventListener('click', function (e) {
+                if (e.target.classList.contains('decrease-quantity')) {
+                    const index = e.target.getAttribute('data-index');
+                    if (cart[index].quantity > 1) {
+                        cart[index].quantity -= 1;
+                    } else {
+                        cart.splice(index, 1);
+                    }
+                    saveCart();
+                    updateCart();
+                }
+            });
+
+            // Remove item event listener
+            document.getElementById('cart-items').addEventListener('click', function (e) {
+                if (e.target.classList.contains('remove-item')) {
+                    const index = e.target.getAttribute('data-index');
+                    cart.splice(index, 1);
+                    saveCart();
+                    updateCart();
+                }
+            });
+
+            // Clear cart event listener
+            document.getElementById('clear-cart').addEventListener('click', function () {
+                cart = [];
+                saveCart();
+                updateCart();
+            });
+
+            // Proceed to payment event listener
+            document.getElementById('proceed-to-payment').addEventListener('click', function () {
+                if (cart.length === 0) {
+                    showToast('Your cart is empty!');
+                    return;
+                }
+                const modal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+                modal.show();
+            });
+
+            // Payment option selection
+            document.querySelectorAll('input[name="payment-method"]').forEach(radio => {
+                radio.addEventListener('change', function () {
+                    selectedPaymentMethod = this.value;
+                    document.querySelectorAll('.payment-details').forEach(detail => detail.style.display = 'none');
+                    if (this.value === 'credit-debit') {
+                        document.getElementById('credit-debit-details').style.display = 'block';
+                    } else if (this.value === 'upi') {
+                        document.getElementById('upi-details').style.display = 'block';
+                    }
+                });
+            });
+
+            // Real-time form validation for checkout form
+            document.getElementById('checkout-form').addEventListener('input', function (e) {
+                const input = e.target;
+                if (input.required) {
+                    if (!input.value || (input.id === 'phone' && !/^[0-9]{10}$/.test(input.value))) {
+                        input.classList.add('is-invalid');
+                    } else {
+                        input.classList.remove('is-invalid');
+                    }
+                }
+            });
+
+            // Real-time validation for payment details
+            document.getElementById('payment-section').addEventListener('input', function (e) {
+                const input = e.target;
+                if (input.id === 'card-number' && !/^[0-9]{16}$/.test(input.value)) {
+                    input.classList.add('is-invalid');
+                } else if (input.id === 'card-expiry' && !/^(0[1-9]|1[0-2])\/[0-9]{2}$/.test(input.value)) {
+                    input.classList.add('is-invalid');
+                } else if (input.id === 'card-cvv' && !/^[0-9]{3}$/.test(input.value)) {
+                    input.classList.add('is-invalid');
+                } else if (input.id === 'upi-id' && !/.+@.+/.test(input.value)) {
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+
+            // Checkout form submission
+            document.getElementById('checkout-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+                if (cart.length === 0) {
+                    showToast('Your cart is empty!');
+                    return;
+                }
+
+                const name = document.getElementById('name');
+                const email = document.getElementById('email');
+                const phone = document.getElementById('phone');
+                const address = document.getElementById('address');
+
+                // Validate form fields
+                let isValid = true;
+                [name, email, phone, address].forEach(input => {
+                    if (!input.value) {
+                        input.classList.add('is-invalid');
+                        isValid = false;
+                    } else if (input.id === 'phone' && !/^[0-9]{10}$/.test(input.value)) {
+                        input.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        input.classList.remove('is-invalid');
+                    }
+                });
+
+                if (!isValid) {
+                    showToast('Please fill all fields correctly!');
+                    return;
+                }
+
+                // Hide checkout modal and show payment section
+                const modal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+                modal.hide();
+                document.getElementById('payment-section').style.display = 'block';
+            });
+
+            // Confirm payment event listener
+            document.getElementById('confirm-payment').addEventListener('click', function () {
+                if (!selectedPaymentMethod) {
+                    showToast('Please select a payment method!');
+                    return;
+                }
+
+                let isValid = true;
+                if (selectedPaymentMethod === 'credit-debit') {
+                    const cardNumber = document.getElementById('card-number');
+                    const cardExpiry = document.getElementById('card-expiry');
+                    const cardCvv = document.getElementById('card-cvv');
+                    if (!cardNumber.value || !/^[0-9]{16}$/.test(cardNumber.value)) {
+                        cardNumber.classList.add('is-invalid');
+                        isValid = false;
+                    }
+                    if (!cardExpiry.value || !/^(0[1-9]|1[0-2])\/[0-9]{2}$/.test(cardExpiry.value)) {
+                        cardExpiry.classList.add('is-invalid');
+                        isValid = false;
+                    }
+                    if (!cardCvv.value || !/^[0-9]{3}$/.test(cardCvv.value)) {
+                        cardCvv.classList.add('is-invalid');
+                        isValid = false;
+                    }
+                } else if (selectedPaymentMethod === 'upi') {
+                    const upiId = document.getElementById('upi-id');
+                    if (!upiId.value || !/.+@.+/.test(upiId.value)) {
+                        upiId.classList.add('is-invalid');
+                        isValid = false;
+                    }
+                }
+
+                if (!isValid) {
+                    showToast('Please fill all payment details correctly!');
+                    return;
+                }
+
+                // Prepare order summary
+                let total = 0;
+                cart.forEach(item => {
+                    total += item.price * item.quantity;
+                });
+                lastOrder = {
+                    items: [...cart],
+                    total,
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    address: document.getElementById('address').value,
+                    paymentMethod: selectedPaymentMethod === 'credit-debit' ? 'Credit/Debit Card' : selectedPaymentMethod === 'upi' ? 'UPI' : 'Cash on Delivery'
+                };
+
+                // Show order confirmation in toast
+                let toastMessage = `Order Confirmed!\n\nItems:\n`;
+                lastOrder.items.forEach(item => {
+                    toastMessage += `${item.name} (${item.weight}g) - ₹${item.price} x ${item.quantity} = ₹${item.price * item.quantity}\n`;
+                });
+                toastMessage += `\nTotal: ₹${total}\n\nCustomer Details:\nName: ${lastOrder.name}\nEmail: ${lastOrder.email}\nPhone: ${lastOrder.phone}\nAddress: ${lastOrder.address}\nPayment Method: ${lastOrder.paymentMethod}`;
+                showToast(toastMessage);
+
+                // Clear cart and reset forms
+                cart = [];
+                saveCart();
+                updateCart();
+                document.getElementById('checkout-form').reset();
+                document.getElementById('card-number').value = '';
+                document.getElementById('card-expiry').value = '';
+                document.getElementById('card-cvv').value = '';
+                document.getElementById('upi-id').value = '';
+                document.querySelectorAll('.payment-details').forEach(detail => detail.style.display = 'none');
+                document.querySelectorAll('input[name="payment-method"]').forEach(radio => radio.checked = false);
+                selectedPaymentMethod = null;
+            });
+
+            // Initial cart render
+            updateCart();
+        });
+    </script>
+</body>
+
+</html>
