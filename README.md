@@ -15,4 +15,4 @@ A simple, responsive, and visually appealing website for **Kondaji Chivda**, a w
 
 - ## Developer
 **Insha Kazi**  
-📧 inshakazi1108@gmail.com
+
