@@ -13,6 +13,5 @@ A simple, responsive, and visually appealing website for **Kondaji Chivda**, a w
 - Testimonials and contact section. 
 - Fully responsive design.
 
-- ## Developer
-**Insha Kazi**  
+- ## Designed By INSHA KAZI 
 
